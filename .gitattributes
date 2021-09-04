@@ -3,3 +3,5 @@ final_project_group11/** filter=lfs diff=lfs merge=lfs -text
 gazebo_ros_link_attacher/** filter=lfs diff=lfs merge=lfs -text
 location_recorder/** filter=lfs diff=lfs merge=lfs -text
 mapping/** filter=lfs diff=lfs merge=lfs -text
+aws-robomaker-small-house-world/* filter=lfs diff=lfs merge=lfs -text
+gazebo_ros_link_attacher/* filter=lfs diff=lfs merge=lfs -text
