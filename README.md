@@ -10,7 +10,8 @@ The essence of the project is to utilize a technique known as Visual Servoing to
 For this project, we drive two turtlebots in a house environment(simulated in Gazebo) to move between predetermined way-points. Among these two bots, one drives around using mapping and localization where as the other has to utilize visual servoing to follow the first one. The one that uses mapping and localization is named as leader and the other one is follower. In order to utilize the capabilities of visual servoing technique in gazebo environment, the leader has been provided with an Aruco Marker, which will be perceived by the follower’s camera to follow the leader and also enables the follower to keep a safe distance between the two of them. For detailed report checkout [this link]().
 
 
-![Gazebo Simulation](git_images/gazebo.gif)          ![RVIZ Simulation](git_images/rviz.gif)
+![RVIZ Simulation](git_images/rviz.gif)
+![Gazebo Simulation](git_images/gazebo.gif)
 
 ---
 
