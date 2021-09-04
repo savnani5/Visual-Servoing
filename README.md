@@ -7,15 +7,63 @@
 ## Overview
 The essence of the project is to utilize a technique known as Visual Servoing to control the motion of a robot. Visual Servoing is the method of controlling arobot’s motion using real-time feedback from vision sensors to execute tasks like tracking objects and following objects.
 
-For this project, we drive two turtlebots in a house environment(simulated in Gazebo) to move between predetermined way-points. Among these two bots, one drives around using mapping and localization where as the other has to utilize visual servoing to follow the first one. The one that uses mapping and localization is named as leader and the other one is follower. In order to utilize the capabilities of visual servoing technique in gazebo environment, the leader has been provided with an Aruco Marker, which will be perceived by the follower’s camera to follow the leader and also enables the follower to keep a safe distance between the two of them. For detailed report checkout [this link]().
+For this project, we drive two turtlebots in a house environment(simulated in Gazebo) to move between predetermined way-points. Among these two bots, one drives around using mapping and localization where as the other has to utilize visual servoing to follow the first one. The one that uses mapping and localization is named as leader and the other one is follower. In order to utilize the capabilities of visual servoing technique in gazebo environment, the leader has been provided with an Aruco Marker, which will be perceived by the follower’s camera to follow the leader and also enables the follower to keep a safe distance between the two of them. For detailed report checkout [this link](https://github.com/savnani5/Visual-Servoing/blob/main/Python_Applications_for_Robotics.pdf).
 
+
+![Fiducial Marker](git_images/robots.png)
 
 ![RVIZ Simulation](git_images/rviz.gif)
 
 ![Gazebo Simulation](git_images/gazebo.gif)
 
 ---
+## Pipeline
 
+### Location Recorder
+In this step we map the environment and record the robot locations into a yaml file using a ROS service. **aws-robomaker-small-house-world** consists of the gazebo world used for this project.
+
+![Small House World](git_images/world.png)
+
+### Leader Motion
+The leader robot is fed with predetermined way points in the environment and it performs au-
+tonomous navigation to move from one preset location to the other. So, as for any autonomous
+navigation, it first requires a map and in this case has been generated using the slam gmapping
+node from the gmapping package. Next step was to access this map which was done using the
+map server node from map server package. Later on to perform the required path planning
+to successfully move from one point to the other within a map the leader uses the move base
+node from the move base package. Finally, to continuously localize the robot in the map it uti-
+lizes uses the amcl node from the amcl package and the benefit of this is package is the more
+the robot moves in the environment, the more data the robot will get from sensor readings,
+which results in more accurate localization. This approach ensures that the robot is capable of
+performing navigation while avoiding the obstacles in the environment.
+
+### Pose Broadcaster
+This node is responsible for initializing a subscriber to recieve fiducial transforms from the
+aruco marker detection. The transformation between the map and the marker is not directly
+obtained by can be found by determining the the following three transformations: map-robot,
+robot-camera, camera-marker. The fiducial transforms contain the pose of the marker
+with respect to the follower camera frame. We create a tf broadcaster to transmit these trans-
+forms to the tf tree an finally we perform a lookup transform to get the pose of the marker
+with respect to the map frame.
+
+![Pose Broadcast](git_images/pose_broadcaster.png)    
+
+### Follower Motion
+The follower’s task is to detect the marker placed on top of the leader and use the move base
+action client to move to the marker’s location. In order to achieve this we would need the lo-
+cation of the marker in global co-ordinates which can be obtained by the transformation be-
+tween the map and the marker using the pose broadcaster node and lookup transformation.
+So, by keeping a track of these transformations we continuously obtain the marker’s location
+and drive the follower. move base client is a recursive function which calls itself continuously
+till the marker is in the sight and waits for the server to execute the maneuvers. It stores the transforms into a buffer variable to enable the traversal to the latest point the marker was detected and it continuously updates this variable. If the marker is lost from the camera sight of the follower camera, the lookup transforms through an error and the search protocol is executed in the except block. Following the protocol, the follower first rotates for 360 degrees and if it finds the marker it follows it, else it reads the parameter server value, set by the leader and tries to reach that location using move base
+to increase the probability of detection. If it reaches the position and still doesn’t find the marker, it rotates continuously at that position.
+The challenging part in this section is to make the follower continuously follow the marker
+without loosing its sight and to take into account the rotations and the translations of the
+leader to calculate relative angular error rates and synchronize the speed.
+
+![Follower following the leader robot after detecting the aruco marker](git_images/following.png)     ![Follower heading towards the parameter server](git_images/param_server.png)
+
+---
 ## Dependencies
 - Ubuntu 18.04 (Operating System)
 - Python 3.6.9
