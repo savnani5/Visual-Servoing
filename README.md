@@ -11,6 +11,7 @@ For this project, we drive two turtlebots in a house environment(simulated in Ga
 
 
 ![RVIZ Simulation](git_images/rviz.gif)
+
 ![Gazebo Simulation](git_images/gazebo.gif)
 
 ---
