@@ -40,7 +40,7 @@ performing navigation while avoiding the obstacles in the environment.
 ### Pose Broadcaster
 This node is responsible for initializing a subscriber to recieve fiducial transforms from the
 aruco marker detection. The transformation between the map and the marker is not directly
-obtained by can be found by determining the the following three transformations: map-robot,
+obtained by can be found by determining the following three transformations: map-robot,
 robot-camera, camera-marker. The fiducial transforms contain the pose of the marker
 with respect to the follower camera frame. We create a tf broadcaster to transmit these trans-
 forms to the tf tree an finally we perform a lookup transform to get the pose of the marker
