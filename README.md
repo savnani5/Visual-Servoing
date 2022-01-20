@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 ## Overview
-The essence of the project is to utilize a technique known as Visual Servoing to control the motion of a robot. Visual Servoing is the method of controlling arobot’s motion using real-time feedback from vision sensors to execute tasks like tracking objects and following objects.
+The essence of the project is to utilize a technique known as Visual Servoing to control the motion of a robot. Visual Servoing is a method of controlling a robot’s motion using real-time feedback from vision sensors to execute tasks like tracking objects and following objects.
 
 For this project, we drive two turtlebots in a house environment(simulated in Gazebo) to move between predetermined way-points. Among these two bots, one drives around using mapping and localization where as the other has to utilize visual servoing to follow the first one. The one that uses mapping and localization is named as leader and the other one is follower. In order to utilize the capabilities of visual servoing technique in gazebo environment, the leader has been provided with an Aruco Marker, which will be perceived by the follower’s camera to follow the leader and also enables the follower to keep a safe distance between the two of them. For detailed report checkout [this link](https://github.com/savnani5/Visual-Servoing/blob/main/Python_Applications_for_Robotics.pdf).
 
